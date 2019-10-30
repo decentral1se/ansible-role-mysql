@@ -1,0 +1,134 @@
+---
+defaults:
+  mysql_bind_address:
+    help: TODO.
+  mysql_binlog_format:
+    help: TODO.
+  mysql_config_include_files:
+    help: TODO.
+  mysql_databases:
+    help: TODO.
+  mysql_datadir:
+    help: TODO.
+  mysql_enabled_on_startup:
+    help: TODO.
+  mysql_enablerepo:
+    help: TODO.
+  mysql_event_scheduler_state:
+    help: TODO.
+  mysql_expire_logs_days:
+    help: TODO.
+  mysql_group_concat_max_len:
+    help: TODO.
+  mysql_innodb_buffer_pool_size:
+    help: TODO.
+  mysql_innodb_file_format:
+    help: TODO.
+  mysql_innodb_file_per_table:
+    help: TODO.
+  mysql_innodb_flush_log_at_trx_commit:
+    help: TODO.
+  mysql_innodb_large_prefix:
+    help: TODO.
+  mysql_innodb_lock_wait_timeout:
+    help: TODO.
+  mysql_innodb_log_buffer_size:
+    help: TODO.
+  mysql_innodb_log_file_size:
+    help: TODO.
+  mysql_join_buffer_size:
+    help: TODO.
+  mysql_key_buffer_size:
+    help: TODO.
+  mysql_log:
+    help: TODO.
+  mysql_log_file_group:
+    help: TODO.
+  mysql_lower_case_table_names:
+    help: TODO.
+  mysql_max_allowed_packet:
+    help: TODO.
+  mysql_max_binlog_size:
+    help: TODO.
+  mysql_max_connections:
+    help: TODO.
+  mysql_max_heap_table_size:
+    help: TODO.
+  mysql_myisam_sort_buffer_size:
+    help: TODO.
+  mysql_mysqldump_max_allowed_packet:
+    help: TODO.
+  mysql_port:
+    help: TODO.
+  mysql_query_cache_limit:
+    help: TODO.
+  mysql_query_cache_size:
+    help: TODO.
+  mysql_query_cache_type:
+    help: TODO.
+  mysql_read_buffer_size:
+    help: TODO.
+  mysql_read_rnd_buffer_size:
+    help: TODO.
+  mysql_replication_master:
+    help: TODO.
+  mysql_replication_role:
+    help: TODO.
+  mysql_replication_user:
+    help: TODO.
+  mysql_root_home:
+    help: TODO.
+  mysql_root_password:
+    help: TODO.
+  mysql_root_password_update:
+    help: TODO.
+  mysql_root_username:
+    help: TODO.
+  mysql_server_id:
+    help: TODO.
+  mysql_skip_name_resolve:
+    help: TODO.
+  mysql_slow_query_log_enabled:
+    help: TODO.
+  mysql_slow_query_time:
+    help: TODO.
+  mysql_sort_buffer_size:
+    help: TODO.
+  mysql_sql_mode:
+    help: TODO.
+  mysql_table_open_cache:
+    help: TODO.
+  mysql_thread_cache_size:
+    help: TODO.
+  mysql_tmp_table_size:
+    help: TODO.
+  mysql_user_home:
+    help: TODO.
+  mysql_user_name:
+    help: TODO.
+  mysql_user_password:
+    help: TODO.
+  mysql_user_password_update:
+    help: TODO.
+  mysql_users:
+    help: TODO.
+  mysql_wait_timeout:
+    help: TODO.
+  overwrite_global_mycnf:
+    help: TODO.
+
+examples:
+  "Basic Usage": |
+    - hosts: db-servers
+      roles:
+        - role: geerlingguy.mysql
+          mysql_root_password: super-secure-password
+          mysql_databases:
+            - name: example_db
+              encoding: latin1
+              collation: latin1_general_ci
+          mysql_users:
+            - name: example_user
+              host: "%"
+              password: similarly-secure-password
+              priv: "example_db.*:ALL"

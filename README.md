@@ -1,195 +1,499 @@
-# Ansible Role: MySQL
+# ansible-role-mysql
 
-[![Build Status](https://travis-ci.org/geerlingguy/ansible-role-mysql.svg?branch=master)](https://travis-ci.org/geerlingguy/ansible-role-mysql)
+## Table Of Contents
 
-Installs and configures MySQL or MariaDB server on RHEL/CentOS or Debian/Ubuntu servers.
+* [About](#about)
+* [Role Defaults](#role-defaults)
+* [Example Playbooks](#example-playbooks)
+* [License](#license)
+* [Author](#author)
 
-## Requirements
+## About
 
-No special requirements; note that this role requires root access, so either run it in a playbook with a global `become: yes`, or invoke the role in your playbook like:
+> MySQL server for RHEL/CentOS and Debian/Ubuntu.
 
-    - hosts: database
-      roles:
-        - role: geerlingguy.mysql
-          become: yes
+[Back to table of contents](#table-of-contents)
 
-## Role Variables
+## Role Defaults
 
-Available variables are listed below, along with default values (see `defaults/main.yml`):
+**Quicklist**: [mysql_bind_address](#mysql_bind_address),
+[mysql_binlog_format](#mysql_binlog_format),
+[mysql_config_include_files](#mysql_config_include_files),
+[mysql_databases](#mysql_databases), [mysql_datadir](#mysql_datadir),
+[mysql_enabled_on_startup](#mysql_enabled_on_startup),
+[mysql_enablerepo](#mysql_enablerepo),
+[mysql_event_scheduler_state](#mysql_event_scheduler_state),
+[mysql_expire_logs_days](#mysql_expire_logs_days),
+[mysql_group_concat_max_len](#mysql_group_concat_max_len),
+[mysql_innodb_buffer_pool_size](#mysql_innodb_buffer_pool_size),
+[mysql_innodb_file_format](#mysql_innodb_file_format),
+[mysql_innodb_file_per_table](#mysql_innodb_file_per_table),
+[mysql_innodb_flush_log_at_trx_commit](#mysql_innodb_flush_log_at_trx_commit),
+[mysql_innodb_large_prefix](#mysql_innodb_large_prefix),
+[mysql_innodb_lock_wait_timeout](#mysql_innodb_lock_wait_timeout),
+[mysql_innodb_log_buffer_size](#mysql_innodb_log_buffer_size),
+[mysql_innodb_log_file_size](#mysql_innodb_log_file_size),
+[mysql_join_buffer_size](#mysql_join_buffer_size),
+[mysql_key_buffer_size](#mysql_key_buffer_size), [mysql_log](#mysql_log),
+[mysql_log_file_group](#mysql_log_file_group),
+[mysql_lower_case_table_names](#mysql_lower_case_table_names),
+[mysql_max_allowed_packet](#mysql_max_allowed_packet),
+[mysql_max_binlog_size](#mysql_max_binlog_size),
+[mysql_max_connections](#mysql_max_connections),
+[mysql_max_heap_table_size](#mysql_max_heap_table_size),
+[mysql_myisam_sort_buffer_size](#mysql_myisam_sort_buffer_size),
+[mysql_mysqldump_max_allowed_packet](#mysql_mysqldump_max_allowed_packet),
+[mysql_port](#mysql_port), [mysql_query_cache_limit](#mysql_query_cache_limit),
+[mysql_query_cache_size](#mysql_query_cache_size),
+[mysql_query_cache_type](#mysql_query_cache_type),
+[mysql_read_buffer_size](#mysql_read_buffer_size),
+[mysql_read_rnd_buffer_size](#mysql_read_rnd_buffer_size),
+[mysql_replication_master](#mysql_replication_master),
+[mysql_replication_role](#mysql_replication_role),
+[mysql_replication_user](#mysql_replication_user),
+[mysql_root_home](#mysql_root_home),
+[mysql_root_password](#mysql_root_password),
+[mysql_root_password_update](#mysql_root_password_update),
+[mysql_root_username](#mysql_root_username),
+[mysql_server_id](#mysql_server_id),
+[mysql_skip_name_resolve](#mysql_skip_name_resolve),
+[mysql_slow_query_log_enabled](#mysql_slow_query_log_enabled),
+[mysql_slow_query_time](#mysql_slow_query_time),
+[mysql_sort_buffer_size](#mysql_sort_buffer_size),
+[mysql_sql_mode](#mysql_sql_mode),
+[mysql_table_open_cache](#mysql_table_open_cache),
+[mysql_thread_cache_size](#mysql_thread_cache_size),
+[mysql_tmp_table_size](#mysql_tmp_table_size),
+[mysql_user_home](#mysql_user_home), [mysql_user_name](#mysql_user_name),
+[mysql_user_password](#mysql_user_password),
+[mysql_user_password_update](#mysql_user_password_update),
+[mysql_users](#mysql_users), [mysql_wait_timeout](#mysql_wait_timeout),
+[overwrite_global_mycnf](#overwrite_global_mycnf)
 
-    mysql_user_home: /root
-    mysql_user_name: root
-    mysql_user_password: root
+### mysql_bind_address 
 
-The home directory inside which Python MySQL settings will be stored, which Ansible will use when connecting to MySQL. This should be the home directory of the user which runs this Ansible role. The `mysql_user_name` and `mysql_user_password` can be set if you are running this role under a non-root user account and want to set a non-root user.
+* *help*: TODO.
+* *default*: ``0.0.0.0``
 
-    mysql_root_home: /root
-    mysql_root_username: root
-    mysql_root_password: root
+[Back to table of contents](#table-of-contents)
 
-The MySQL root user account details.
+### mysql_binlog_format 
 
-    mysql_root_password_update: false
+* *help*: TODO.
+* *default*: ``ROW``
 
-Whether to force update the MySQL root user's password. By default, this role will only change the root user's password when MySQL is first configured. You can force an update by setting this to `yes`.
+[Back to table of contents](#table-of-contents)
 
-> Note: If you get an error like `ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)` after a failed or interrupted playbook run, this usually means the root password wasn't originally updated to begin with. Try either removing  the `.my.cnf` file inside the configured `mysql_user_home` or updating it and setting `password=''` (the insecure default password). Run the playbook again, with `mysql_root_password_update` set to `yes`, and the setup should complete.
+### mysql_config_include_files 
 
-> Note: If you get an error like `ERROR 1698 (28000): Access denied for user 'root'@'localhost' (using password: YES)` when trying to log in from the CLI you might need to run as root or sudoer.
+* *help*: TODO.
 
-    mysql_enabled_on_startup: true
+[Back to table of contents](#table-of-contents)
 
-Whether MySQL should be enabled on startup.
+### mysql_databases 
 
-    mysql_config_file: *default value depends on OS*
-    mysql_config_include_dir: *default value depends on OS*
-    
-The main my.cnf configuration file and include directory.
+* *help*: TODO.
 
-    overwrite_global_mycnf: true
+[Back to table of contents](#table-of-contents)
 
-Whether the global my.cnf should be overwritten each time this role is run. Setting this to `no` tells Ansible to only create the `my.cnf` file if it doesn't exist. This should be left at its default value (`yes`) if you'd like to use this role's variables to configure MySQL.
+### mysql_datadir 
 
-    mysql_config_include_files: []
+* *help*: TODO.
+* *default*: ``/var/lib/mysql``
 
-A list of files that should override the default global my.cnf. Each item in the array requires a "src" parameter which is a path to a file. An optional "force" parameter can force the file to be updated each time ansible runs.
+[Back to table of contents](#table-of-contents)
 
-    mysql_databases: []
+### mysql_enabled_on_startup 
 
-The MySQL databases to create. A database has the values `name`, `encoding` (defaults to `utf8`), `collation` (defaults to `utf8_general_ci`) and `replicate` (defaults to `1`, only used if replication is configured). The formats of these are the same as in the `mysql_db` module.
+* *help*: TODO.
+* *default*: ``True``
 
-You can also delete a database (or ensure it's not on the server) by setting `state` to `absent` (defaults to `present`).
+[Back to table of contents](#table-of-contents)
 
-    mysql_users: []
+### mysql_enablerepo 
 
-The MySQL users and their privileges. A user has the values:
+* *help*: TODO.
 
-  - `name`
-  - `host` (defaults to `localhost`)
-  - `password` (can be plaintext or encrypted—if encrypted, set `encrypted: yes`)
-  - `encrypted` (defaults to `no`)
-  - `priv` (defaults to `*.*:USAGE`)
-  - `append_privs` (defaults to `no`)
-  - `state`  (defaults to `present`)
+[Back to table of contents](#table-of-contents)
 
-The formats of these are the same as in the `mysql_user` module.
+### mysql_event_scheduler_state 
 
-    mysql_packages:
-      - mysql
-      - mysql-server
+* *help*: TODO.
+* *default*: ``OFF``
 
-(OS-specific, RedHat/CentOS defaults listed here) Packages to be installed. In some situations, you may need to add additional packages, like `mysql-devel`.
+[Back to table of contents](#table-of-contents)
 
-    mysql_enablerepo: ""
+### mysql_expire_logs_days 
 
-(RedHat/CentOS only) If you have enabled any additional repositories (might I suggest geerlingguy.repo-epel or geerlingguy.repo-remi), those repositories can be listed under this variable (e.g. `remi,epel`). This can be handy, as an example, if you want to install later versions of MySQL.
+* *help*: TODO.
+* *default*: ``10``
 
-    mysql_port: "3306"
-    mysql_bind_address: '0.0.0.0'
-    mysql_datadir: /var/lib/mysql
-    mysql_socket: *default value depends on OS*
-    mysql_pid_file: *default value depends on OS*
+[Back to table of contents](#table-of-contents)
 
-Default MySQL connection configuration.
+### mysql_group_concat_max_len 
 
-    mysql_log_file_group: mysql *adm on Debian*
-    mysql_log: ""
-    mysql_log_error: *default value depends on OS*
-    mysql_syslog_tag: *default value depends on OS*
+* *help*: TODO.
+* *default*: ``1024``
 
-MySQL logging configuration. Setting `mysql_log` (the general query log) or `mysql_log_error` to `syslog` will make MySQL log to syslog using the `mysql_syslog_tag`.
+[Back to table of contents](#table-of-contents)
 
-    mysql_slow_query_log_enabled: false
-    mysql_slow_query_log_file: *default value depends on OS*
-    mysql_slow_query_time: 2
+### mysql_innodb_buffer_pool_size 
 
-Slow query log settings. Note that the log file will be created by this role, but if you're running on a server with SELinux or AppArmor, you may need to add this path to the allowed paths for MySQL, or disable the mysql profile. For example, on Debian/Ubuntu, you can run `sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/disable/usr.sbin.mysqld && sudo service apparmor restart`.
+* *help*: TODO.
+* *default*: ``256M``
 
-    mysql_key_buffer_size: "256M"
-    mysql_max_allowed_packet: "64M"
-    mysql_table_open_cache: "256"
-    [...]
+[Back to table of contents](#table-of-contents)
 
-The rest of the settings in `defaults/main.yml` control MySQL's memory usage and some other common settings. The default values are tuned for a server where MySQL can consume ~512 MB RAM, so you should consider adjusting them to suit your particular server better.
+### mysql_innodb_file_format 
 
-    mysql_server_id: "1"
-    mysql_max_binlog_size: "100M"
-    mysql_binlog_format: "ROW"
-    mysql_expire_logs_days: "10"
-    mysql_replication_role: ''
-    mysql_replication_master: ''
-    mysql_replication_user: {}
+* *help*: TODO.
+* *default*: ``barracuda``
 
-Replication settings. Set `mysql_server_id` and `mysql_replication_role` by server (e.g. the master would be ID `1`, with the `mysql_replication_role` of `master`, and the slave would be ID `2`, with the `mysql_replication_role` of `slave`). The `mysql_replication_user` uses the same keys as individual list items in `mysql_users`, and is created on master servers, and used to replicate on all the slaves.
+[Back to table of contents](#table-of-contents)
 
-`mysql_replication_master` needs to resolve to an IP or a hostname which is accessable to the Slaves (this could be a `/etc/hosts` injection or some other means), otherwise the slaves cannot communicate to the master.
+### mysql_innodb_file_per_table 
 
-### Later versions of MySQL on CentOS 7
+* *help*: TODO.
+* *default*: ``1``
 
-If you want to install MySQL from the official repository instead of installing the system default MariaDB equivalents, you can add the following `pre_tasks` task in your playbook:
+[Back to table of contents](#table-of-contents)
+
+### mysql_innodb_flush_log_at_trx_commit 
+
+* *help*: TODO.
+* *default*: ``1``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_innodb_large_prefix 
+
+* *help*: TODO.
+* *default*: ``1``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_innodb_lock_wait_timeout 
+
+* *help*: TODO.
+* *default*: ``50``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_innodb_log_buffer_size 
+
+* *help*: TODO.
+* *default*: ``8M``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_innodb_log_file_size 
+
+* *help*: TODO.
+* *default*: ``64M``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_join_buffer_size 
+
+* *help*: TODO.
+* *default*: ``262144``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_key_buffer_size 
+
+* *help*: TODO.
+* *default*: ``256M``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_log 
+
+* *help*: TODO.
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_log_file_group 
+
+* *help*: TODO.
+* *default*: ``mysql``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_lower_case_table_names 
+
+* *help*: TODO.
+* *default*: ``0``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_max_allowed_packet 
+
+* *help*: TODO.
+* *default*: ``64M``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_max_binlog_size 
+
+* *help*: TODO.
+* *default*: ``100M``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_max_connections 
+
+* *help*: TODO.
+* *default*: ``151``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_max_heap_table_size 
+
+* *help*: TODO.
+* *default*: ``16M``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_myisam_sort_buffer_size 
+
+* *help*: TODO.
+* *default*: ``64M``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_mysqldump_max_allowed_packet 
+
+* *help*: TODO.
+* *default*: ``64M``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_port 
+
+* *help*: TODO.
+* *default*: ``3306``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_query_cache_limit 
+
+* *help*: TODO.
+* *default*: ``1M``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_query_cache_size 
+
+* *help*: TODO.
+* *default*: ``16M``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_query_cache_type 
+
+* *help*: TODO.
+* *default*: ``0``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_read_buffer_size 
+
+* *help*: TODO.
+* *default*: ``1M``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_read_rnd_buffer_size 
+
+* *help*: TODO.
+* *default*: ``4M``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_replication_master 
+
+* *help*: TODO.
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_replication_role 
+
+* *help*: TODO.
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_replication_user 
+
+* *help*: TODO.
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_root_home 
+
+* *help*: TODO.
+* *default*: ``/root``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_root_password 
+
+* *help*: TODO.
+* *default*: ``root``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_root_password_update 
+
+* *help*: TODO.
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_root_username 
+
+* *help*: TODO.
+* *default*: ``root``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_server_id 
+
+* *help*: TODO.
+* *default*: ``1``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_skip_name_resolve 
+
+* *help*: TODO.
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_slow_query_log_enabled 
+
+* *help*: TODO.
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_slow_query_time 
+
+* *help*: TODO.
+* *default*: ``2``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_sort_buffer_size 
+
+* *help*: TODO.
+* *default*: ``1M``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_sql_mode 
+
+* *help*: TODO.
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_table_open_cache 
+
+* *help*: TODO.
+* *default*: ``256``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_thread_cache_size 
+
+* *help*: TODO.
+* *default*: ``8``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_tmp_table_size 
+
+* *help*: TODO.
+* *default*: ``16M``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_user_home 
+
+* *help*: TODO.
+* *default*: ``/root``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_user_name 
+
+* *help*: TODO.
+* *default*: ``root``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_user_password 
+
+* *help*: TODO.
+* *default*: ``root``
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_user_password_update 
+
+* *help*: TODO.
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_users 
+
+* *help*: TODO.
+
+[Back to table of contents](#table-of-contents)
+
+### mysql_wait_timeout 
+
+* *help*: TODO.
+* *default*: ``28800``
+
+[Back to table of contents](#table-of-contents)
+
+### overwrite_global_mycnf 
+
+* *help*: TODO.
+* *default*: ``True``
+
+[Back to table of contents](#table-of-contents)
+
+## Example Playbooks
+
+### Basic Usage
 
 ```yaml
-  pre_tasks:
-    - name: Install the MySQL repo.
-      yum:
-        name: http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
-        state: present
-      when: ansible_os_family == "RedHat"
-  
-    - name: Override variables for MySQL (RedHat).
-      set_fact:
-        mysql_daemon: mysqld
-        mysql_packages: ['mysql-server']
-        mysql_log_error: /var/log/mysqld.err
-        mysql_syslog_tag: mysqld
-        mysql_pid_file: /var/run/mysqld/mysqld.pid
-        mysql_socket: /var/lib/mysql/mysql.sock
-      when: ansible_os_family == "RedHat"
+- hosts: db-servers
+  roles:
+    - role: geerlingguy.mysql
+      mysql_root_password: super-secure-password
+      mysql_databases:
+        - name: example_db
+          encoding: latin1
+          collation: latin1_general_ci
+      mysql_users:
+        - name: example_user
+          host: "%"
+          password: similarly-secure-password
+          priv: "example_db.*:ALL"
 ```
 
-### MariaDB usage
 
-This role works with either MySQL or a compatible version of MariaDB. On RHEL/CentOS 7+, the mariadb database engine was substituted as the default MySQL replacement package. No modifications are necessary though all of the variables still reference 'mysql' instead of mariadb.
-
-#### Ubuntu 14.04 and 16.04 MariaDB configuration
-
-On Ubuntu, the package names are named differently, so the `mysql_package` variable needs to be altered. Set the following variables (at a minimum):
-
-    mysql_packages:
-      - mariadb-client
-      - mariadb-server
-      - python-mysqldb
-
-## Dependencies
-
-None.
-
-## Example Playbook
-
-    - hosts: db-servers
-      become: yes
-      vars_files:
-        - vars/main.yml
-      roles:
-        - { role: geerlingguy.mysql }
-
-*Inside `vars/main.yml`*:
-
-    mysql_root_password: super-secure-password
-    mysql_databases:
-      - name: example_db
-        encoding: latin1
-        collation: latin1_general_ci
-    mysql_users:
-      - name: example_user
-        host: "%"
-        password: similarly-secure-password
-        priv: "example_db.*:ALL"
+[Back to table of contents](#table-of-contents)
 
 ## License
 
-MIT / BSD
+license (BSD, MIT)
 
-## Author Information
+[Back to table of contents](#table-of-contents)
 
-This role was created in 2014 by [Jeff Geerling](https://www.jeffgeerling.com/), author of [Ansible for DevOps](https://www.ansiblefordevops.com/).
+## Author
+
+geerlingguy
+
+[Back to table of contents](#table-of-contents)
